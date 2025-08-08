@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/mbbs.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <img
+          src="https://res.cloudinary.com/dhva31opb/image/upload/v1717432383/WhatsApp_Image_2024-06-03_at_9.53.55_PM_ksh3qi.jpg"
+          class="nav-img"
+        />
+        <a class="navbar-brand ms-3" href="#">Career Compass</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="bg" id="outercontainer">
+      <div class="container pt-3" id="innercontainer"></div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script>
+      const excelFileUrl = "/static/COLLEGES.xlsx";
+      fetchAndProcessExcel(excelFileUrl);
+      async function fetchAndProcessExcel(url) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(
+              "Network response was not ok " + response.statusText
+            );
+          }
+
+          const arrayBuffer = await response.arrayBuffer();
+          const data = new Uint8Array(arrayBuffer);
+          const workbook = XLSX.read(data, { type: "array" });
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+          const json = XLSX.utils.sheet_to_json(worksheet);
+          renderTable(json);
+        } catch (error) {
+          console.error("Error fetching and processing the Excel file:", error);
+        }
+      }
+
+      function renderTable(data) {
+        data.slice(0).forEach((row) => {
+          if (row["Courses"] == "{{value}}") {
+            let college_list = row["Top Ten Colleges"];
+            let college_link_list = row["college links"];
+            let collegeArray = college_list
+              .split("\n")
+              .map((college) => college.trim())
+              .filter(Boolean);
+            let collegeObject = {};
+            let collegelinkArray = college_link_list
+              .split(" ")
+              .map((college) => college.trim())
+              .filter(Boolean);
+            let collegelinkObject = {};
+            collegeArray.forEach((college, index) => {
+              collegeObject[index] = college;
+            });
+            collegelinkArray.forEach((link_, index) => {
+              collegelinkObject[index] = link_;
+              let cardDiv = document.createElement("div");
+              cardDiv.className = "card shadow mb-1";
+              let paragraph1 = document.createElement("p");
+              paragraph1.textContent = collegeObject[index];
+              let paragraph2 = document.createElement("p");
+              paragraph2.className = "ms-auto";
+              let link = document.createElement("a");
+              link.href = collegelinkObject[index];
+              link.textContent = "link->";
+              paragraph2.appendChild(link);
+              cardDiv.appendChild(paragraph1);
+              cardDiv.appendChild(paragraph2);
+              document.body.appendChild(cardDiv);
+              let inner = document.getElementById("innercontainer");
+              inner.appendChild(cardDiv);
+              let outer = document.getElementById("outercontainer");
+              outer.appendChild(inner);
+            });
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

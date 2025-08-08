@@ -1,0 +1,27 @@
+.nav-img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+}
+.bg-container {
+    background-image: url('https://res.cloudinary.com/dhva31opb/image/upload/v1717432383/WhatsApp_Image_2024-06-03_at_9.53.55_PM_ksh3qi.jpg');
+    height: 94vh;
+    background-size: cover; 
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.card {
+    width: 40%;
+    padding: 40px;
+    background-color: rgba(13, 7, 7, 0.5) !important;
+    backdrop-filter: blur(10px); 
+}
+.card h1 {
+    font-size: 40px;
+    min-height: 10vh;
+    color: #fff
+}
+

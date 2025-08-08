@@ -1,0 +1,28 @@
+.main {
+    height: 30vh;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding: 20px;
+    color: #fff;
+}
+.section {
+    padding: 30px;
+}
+.section h1 {
+    font-size: 30px;
+    font-family: "Roboto";
+    margin-bottom: 30px;
+}
+.card {
+    cursor: pointer;
+}
+.card-img-top {
+    height: 250px;
+}
+.nav-img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+}
